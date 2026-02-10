@@ -1,0 +1,588 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "ArZang Mobile And Electronic — mobile-first multi-vendor eCommerce (frontend plan)",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Add Internet Identity (II) sign-in/sign-out UI, session persistence, and route gating for purchase + account/order pages.",
+      "acceptanceCriteria": [
+        "User can sign in and sign out using Internet Identity.",
+        "Frontend shows authenticated vs unauthenticated states (e.g., account menu, checkout gating).",
+        "Backend exposes a method to read the caller identity and returns the current user profile (creating it if missing)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "create",
+          "description": "Create the root app component that wires TanStack Router, React Query, and auth-aware layout; gate protected routes (checkout, account, orders, admin) based on Internet Identity session state. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useAuth.ts",
+          "operation": "create",
+          "description": "Add a small auth convenience hook wrapping existing Internet Identity context (authenticated boolean, principal string, signIn/signOut helpers) and ensure sign-out clears React Query cache to drop user data. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/auth/LoginButton.tsx",
+          "operation": "create",
+          "description": "Implement a reusable sign-in/sign-out button using Internet Identity, matching the selected authorization component’s recommended frontend patterns. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/auth/RequireAuth.tsx",
+          "operation": "create",
+          "description": "Create an auth guard wrapper for protected pages that shows an English sign-in prompt and a LoginButton when unauthenticated. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/layout/Header.tsx",
+          "operation": "create",
+          "description": "Add a mobile-first header with app name and auth state (LoginButton / account dropdown). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/layout/Footer.tsx",
+          "operation": "create",
+          "description": "Add a persistent footer with links to Privacy Policy, Terms, Support, and About/Contact (public). Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Provide profile view/update screens and frontend form validation with English labels/messages.",
+      "acceptanceCriteria": [
+        "User can update profile fields from the frontend and see them reflected after refresh.",
+        "Backend stores profiles per Principal and does not store any plaintext passwords.",
+        "All user-facing profile labels and validation messages are in English."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/queries/useUserProfile.ts",
+          "operation": "create",
+          "description": "Create React Query hooks for getCallerUserProfile/saveCallerUserProfile and cache invalidation after save; avoid profile-setup modal flash per authorization component guidance. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/AccountPage.tsx",
+          "operation": "create",
+          "description": "Create an Account/Profile page that displays current profile fields and allows updating display name, optional phone number, and optional shipping address with English validation errors; route must be auth-gated. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/profile/ProfileSetupModal.tsx",
+          "operation": "create",
+          "description": "Add a first-login modal that prompts for display name if getCallerUserProfile returns null, and saves profile without showing the principal id. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/forms/ProfileForm.tsx",
+          "operation": "create",
+          "description": "Create a reusable profile form component used by AccountPage and Checkout to edit/confirm shipping details (English labels/messages). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire AccountPage into the router and navigation; ensure it is reachable from header (Account) and requires login. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Render catalog navigation (categories/brands) and product list UI with big images and pagination-ready structure, integrating with available backend product queries where possible.",
+      "acceptanceCriteria": [
+        "Backend exposes query endpoints to list categories/brands and list products with pagination.",
+        "Backend exposes an endpoint to fetch a single product by id with full details (images, specs, stock).",
+        "Frontend renders category and brand navigation for Mobile Phones and Electronics and shows product lists with big product images, name, and price."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/data/catalogTaxonomy.ts",
+          "operation": "create",
+          "description": "Add a frontend taxonomy source for required categories (Mobile Phones, Electronics/Accessories) and common brands to drive navigation UI until full backend category/brand listing is available."
+        },
+        {
+          "path": "frontend/src/types/catalog.ts",
+          "operation": "create",
+          "description": "Define frontend catalog types (Category, Brand, ProductListItem, ProductDetail, Specs, StockStatus) and adapters for the current backend Product shape to UI models."
+        },
+        {
+          "path": "frontend/src/hooks/queries/useProducts.ts",
+          "operation": "create",
+          "description": "Create React Query hooks for product listing/search using available backend functions (e.g., getProductsByName, getProductsByPriceRange) and a client-side fallback when a filter is not supported yet; keep URL-query-driven inputs. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/products/ProductCard.tsx",
+          "operation": "create",
+          "description": "Create a mobile-first product card emphasizing a large image (use generated placeholder when missing), name, and price. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/products/ProductGrid.tsx",
+          "operation": "create",
+          "description": "Create responsive product grid/list component with skeleton/loading/empty states in English; designed to support pagination later. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/products/CategoryNav.tsx",
+          "operation": "create",
+          "description": "Create category/brand navigation UI for Mobile Phones and Electronics using the taxonomy module. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Build mobile-first browsing UX: home, category, brand, listing grid, and product details with gallery/specs/stock status; ensure navigation flow works end-to-end.",
+      "acceptanceCriteria": [
+        "Users can navigate from home → category/brand → product details.",
+        "Product details page clearly shows price, stock state (In stock/Out of stock), and a specifications section.",
+        "UI is mobile-first responsive and consistently uses a blue/white theme."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "create",
+          "description": "Implement the home page featuring the generated hero banner, prominent category tiles (Mobiles/Electronics), and featured products section; mobile-first layout. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/CategoryPage.tsx",
+          "operation": "create",
+          "description": "Implement a category listing page (route param-based) that renders filters, product grid, and brand navigation scoped to the category. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/BrandPage.tsx",
+          "operation": "create",
+          "description": "Implement a brand listing page (route param-based) that renders products for a brand within a selected category context. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/ProductDetailsPage.tsx",
+          "operation": "create",
+          "description": "Implement product details with image gallery (fallback to generated placeholder), price, stock status label (English), and a specifications section; include Add to Cart CTA. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/products/ImageGallery.tsx",
+          "operation": "create",
+          "description": "Create a swipe-friendly, mobile-first image gallery component for product images with placeholder fallback. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register routes for Home, Category, Brand, and Product Details pages and ensure header navigation links resolve correctly. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/public/assets/generated/home-hero.dim_1600x600.png",
+          "operation": "create",
+          "description": "Add generated asset to the workspace and wire it into the HomePage hero section (static asset)."
+        },
+        {
+          "path": "frontend/public/assets/generated/category-mobiles.dim_512x512.png",
+          "operation": "create",
+          "description": "Add generated asset to the workspace and wire it into category tiles/navigation UI (static asset)."
+        },
+        {
+          "path": "frontend/public/assets/generated/category-electronics.dim_512x512.png",
+          "operation": "create",
+          "description": "Add generated asset to the workspace and wire it into category tiles/navigation UI (static asset)."
+        },
+        {
+          "path": "frontend/public/assets/generated/product-placeholder.dim_800x800.png",
+          "operation": "create",
+          "description": "Add generated asset to the workspace and use as the default product image across listings/details when no image URL is available (static asset)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Implement an authenticated shopping cart UX (add/remove/update quantity, subtotal) and integrate with backend persistence capabilities when available.",
+      "acceptanceCriteria": [
+        "User can add a product to cart from product list/details.",
+        "Cart persists across refresh and across devices for the same authenticated user.",
+        "Cart totals update correctly when quantity changes and when items are removed."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/state/cart/cartTypes.ts",
+          "operation": "create",
+          "description": "Define cart state types (CartItem with product snapshot fields needed for display) and subtotal calculations used consistently by Cart and Checkout."
+        },
+        {
+          "path": "frontend/src/state/cart/useCart.ts",
+          "operation": "create",
+          "description": "Create a cart state hook with actions (add/remove/setQty/clear) and optimistic UI updates; integrate with authenticated user state so cart features are gated for purchase flows. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/CartPage.tsx",
+          "operation": "create",
+          "description": "Implement a cart page (auth-gated for checkout actions) with quantity controls, remove buttons, subtotal, and a primary Checkout CTA; show clear English empty-state messaging. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/cart/AddToCartButton.tsx",
+          "operation": "create",
+          "description": "Add an Add to Cart control used from ProductCard and ProductDetailsPage; require authentication before adding or prompt login. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire CartPage route and ensure header navigation includes Cart with mobile-friendly access. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Build checkout flow with shipping details, COD option, and Stripe redirect-based card payment with success/failure handling screens.",
+      "acceptanceCriteria": [
+        "Checkout offers COD and Stripe as payment options (PayPal/local gateways are not implemented).",
+        "Order creation fails with a clear English error if any item is out of stock or quantity exceeds stock.",
+        "COD orders are created immediately and appear in the user’s order list.",
+        "Stripe flow results in an order marked as Paid when payment succeeds (and not marked paid when it fails/cancels)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/CheckoutPage.tsx",
+          "operation": "create",
+          "description": "Implement an auth-gated checkout page: show cart summary, shipping details (prefill from profile with option to edit), and payment method selector (COD/Stripe) with English validation messages. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/checkout/PaymentMethodSelector.tsx",
+          "operation": "create",
+          "description": "Create UI for selecting COD vs Stripe, with clear English descriptions and disabled states when cart is empty. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/mutations/useStripeCheckout.ts",
+          "operation": "create",
+          "description": "Implement Stripe checkout session creation using backend createCheckoutSession and required JSON parsing, validating that session.url is non-empty before redirecting via window.location.href. Use the selected stripe component guidance; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/PaymentSuccessPage.tsx",
+          "operation": "create",
+          "description": "Create a payment success page at /payment-success that reads session info from URL (if present), shows an English confirmation, and prompts navigation to Orders. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/PaymentFailurePage.tsx",
+          "operation": "create",
+          "description": "Create a payment failure page at /payment-failure that shows an English failure/cancel message and returns user to Checkout/Cart. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/admin/StripePaymentSetup.tsx",
+          "operation": "create",
+          "description": "Add an admin-only Stripe configuration UI using isStripeConfigured/setStripeConfiguration, shown only when not configured. Use the selected stripe component capability; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register routes for Checkout, PaymentSuccess, and PaymentFailure; ensure Checkout is auth-gated and reachable from Cart. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Add user-facing order history and order detail tracking pages with English status/totals/shipping details, and protect access to signed-in user only.",
+      "acceptanceCriteria": [
+        "User can view a list of their orders and open an order details page.",
+        "Order details shows status, items, totals, and shipping details in English.",
+        "Backend enforces that users can only read their own orders."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/types/orders.ts",
+          "operation": "create",
+          "description": "Define frontend order types (status lifecycle, line items snapshot, totals, shipping fields) and UI mapping for statuses in English."
+        },
+        {
+          "path": "frontend/src/hooks/queries/useOrders.ts",
+          "operation": "create",
+          "description": "Create React Query hooks for fetching the signed-in user’s orders and a single order detail (integrate with backend capabilities when available; otherwise show a clear English placeholder and keep the UI wiring ready). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/OrdersPage.tsx",
+          "operation": "create",
+          "description": "Implement an auth-gated orders list page with order cards (status, total, created date) and navigation to order details. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/OrderDetailsPage.tsx",
+          "operation": "create",
+          "description": "Implement an auth-gated order detail page showing status, items snapshot, totals, and shipping details in English with a simple tracking timeline UI. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire Orders routes into the router and header navigation; ensure unauthenticated users are prompted to sign in. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "summary": "Create admin dashboard UI with admin-only route guarding and screens for product management, order status updates, user list, support tickets, and sales reports.",
+      "acceptanceCriteria": [
+        "Only Principals in the backend admin allowlist can access admin APIs and admin UI routes.",
+        "Admin can create and edit products including images, specs, price, category/brand, and stock quantity.",
+        "Admin can change order status and the user sees the updated status in their tracking page.",
+        "Sales report page shows at least: total orders, total revenue (from paid orders), and top products for a selectable date range."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useAdmin.ts",
+          "operation": "create",
+          "description": "Add admin utilities: React Query call to getCallerUserRole/isCallerAdmin, plus a computed isAdmin flag for route guarding and conditional navigation (Admin link in header). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/auth/RequireAdmin.tsx",
+          "operation": "create",
+          "description": "Create an admin guard that blocks non-admin users from admin routes and shows an English Access Denied screen. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/admin/AdminDashboardPage.tsx",
+          "operation": "create",
+          "description": "Implement an admin dashboard landing page with navigation tiles to Products, Orders, Users, Support Tickets, Sales Reports, and Stripe Setup; admin-only. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/admin/AdminProductsPage.tsx",
+          "operation": "create",
+          "description": "Implement admin product management UI (list/create/edit/delete) including image URLs and specs inputs; integrate with currently available backend createProduct where possible and clearly label any temporarily unsupported fields in English. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/admin/AdminOrdersPage.tsx",
+          "operation": "create",
+          "description": "Implement admin orders management UI to view orders and update status; wire to backend when available and keep UI/state handling ready. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/admin/AdminUsersPage.tsx",
+          "operation": "create",
+          "description": "Implement minimal admin users list UI (principal/display name/created) with privacy-respecting display; wire to backend when available. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/admin/AdminReportsPage.tsx",
+          "operation": "create",
+          "description": "Implement sales report UI with date range selector and KPIs (total orders, revenue from paid orders, top products); wire to backend when available and show English empty states. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Add admin routes and ensure header shows Admin link only when isAdmin is true; routes must be guarded by RequireAdmin. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/layout/Header.tsx",
+          "operation": "modify",
+          "description": "Update header navigation to include an Admin entry only for admins (based on isAdmin). Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "summary": "Add product search and filters (category/brand/price range) with state synced to URL query parameters.",
+      "acceptanceCriteria": [
+        "User can search by keyword and filter by category/brand/price range on product listing pages.",
+        "Filters and search can be shared via URL and restore state on refresh.",
+        "Backend supports server-side filtering/pagination for performance."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useUrlSearchState.ts",
+          "operation": "create",
+          "description": "Create a small hook to read/write listing filters to URL query parameters (keyword, brand, minPrice, maxPrice) and restore on reload. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/products/ProductFilters.tsx",
+          "operation": "create",
+          "description": "Implement filter controls (search input, brand dropdown, price range inputs) that sync to URL query parameters and trigger refetch via React Query; all copy in English. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/CategoryPage.tsx",
+          "operation": "modify",
+          "description": "Wire ProductFilters into CategoryPage and ensure URL-driven filters control the product query and are shareable. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/BrandPage.tsx",
+          "operation": "modify",
+          "description": "Wire ProductFilters into BrandPage and ensure URL-driven filters control the product query and are shareable. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/queries/useProducts.ts",
+          "operation": "modify",
+          "description": "Update product query logic to accept URL-derived keyword and price range and use available backend functions (getProductsByName/getProductsByPriceRange) with a consistent merge strategy; keep behavior deterministic and performance-minded. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "summary": "Add a customer support contact form page (ticket submission) and admin tickets list/resolution UI.",
+      "acceptanceCriteria": [
+        "User can submit a support ticket and gets a confirmation message in English.",
+        "Admin can view submitted tickets and update their status (Open/Resolved).",
+        "No real-time chat is implemented; only the contact form/ticket workflow exists."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/SupportPage.tsx",
+          "operation": "create",
+          "description": "Implement a support contact form with subject, message, and optional order id; show English confirmation and validation errors; no chat UI. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/admin/AdminSupportTicketsPage.tsx",
+          "operation": "create",
+          "description": "Implement admin-only support ticket list and a control to mark tickets as Resolved/Open; wire to backend when available and show English empty/loading states. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/types/support.ts",
+          "operation": "create",
+          "description": "Define frontend support ticket types and statuses (Open/Resolved) for consistent UI rendering."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register Support route (public) and Admin Support Tickets route (admin-only) and link Support from footer. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/layout/Footer.tsx",
+          "operation": "modify",
+          "description": "Add persistent footer link to Support page. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "summary": "Add public Privacy Policy and Terms & Conditions pages with professional English content and link from footer and checkout/sign-in areas.",
+      "acceptanceCriteria": [
+        "Privacy Policy page is accessible without login.",
+        "Terms & Conditions page is accessible without login.",
+        "Both pages are reachable from a persistent footer and from checkout UI."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/PrivacyPolicyPage.tsx",
+          "operation": "create",
+          "description": "Create a professionally structured Privacy Policy page in English, accessible without login; include sections relevant to eCommerce and Internet Identity principals."
+        },
+        {
+          "path": "frontend/src/pages/TermsPage.tsx",
+          "operation": "create",
+          "description": "Create a professionally structured Terms & Conditions page in English, accessible without login; include ordering/payment/COD/returns disclaimers appropriate for a web shop."
+        },
+        {
+          "path": "frontend/src/components/layout/Footer.tsx",
+          "operation": "modify",
+          "description": "Add persistent footer links to Privacy Policy and Terms pages. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/CheckoutPage.tsx",
+          "operation": "modify",
+          "description": "Add links to Privacy Policy and Terms from checkout UI (near place-order/payment action) with English link labels. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/auth/LoginButton.tsx",
+          "operation": "modify",
+          "description": "Add a small compliance link area near sign-in UI (Privacy/Terms) without blocking sign-in. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register public routes for PrivacyPolicyPage and TermsPage. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-12",
+      "summary": "Implement app shell with brand identity, mobile-first header/footer navigation, and About/Contact page with owner and contact number.",
+      "acceptanceCriteria": [
+        "Header shows app name and provides navigation to Home, Categories, Cart, Orders, Account, and Admin (only for admins).",
+        "About/Contact page displays business owner name and contact number in English labels.",
+        "Navigation is usable on small screens (mobile-first layout)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/layout/AppShell.tsx",
+          "operation": "create",
+          "description": "Create an app shell layout that composes Header + main content + Footer with mobile-first spacing and consistent navigation patterns. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/AboutContactPage.tsx",
+          "operation": "create",
+          "description": "Create About/Contact page that displays business owner name (Imad Ali Durrani) and contact number (0325-1565255) with English labels; accessible without login."
+        },
+        {
+          "path": "frontend/src/components/layout/Header.tsx",
+          "operation": "modify",
+          "description": "Ensure header navigation includes Home, Categories, Cart, Orders, Account, and conditionally Admin (admin-only); optimize for mobile (collapsible menu or icon-based). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/layout/Footer.tsx",
+          "operation": "modify",
+          "description": "Add About/Contact link and ensure footer is persistent across pages. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wrap all routes with AppShell and register About/Contact route; ensure Categories navigation has a clear entry point from header (e.g., opens CategoryNav). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/public/assets/generated/app-logo.dim_1024x1024.png",
+          "operation": "create",
+          "description": "Add generated asset to the workspace and wire it into the header/metadata areas as the brand logo (static asset)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-13",
+      "summary": "Apply a consistent blue/white eCommerce theme (typography, spacing, components) across customer and admin pages with large product imagery.",
+      "acceptanceCriteria": [
+        "All primary actions use the same primary color and button style.",
+        "Product cards use consistent spacing and emphasize large product images.",
+        "Theme is applied across both customer-facing and admin pages."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "create",
+          "description": "Create global Tailwind + CSS variables theme definitions for a professional blue/white palette, consistent typography/spacing, and shadcn/ui variable mappings (primary buttons, backgrounds, borders). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Adjust Tailwind theme tokens if needed to reinforce blue/white branding and consistent component radii/shadows for a modern eCommerce look (without breaking existing shadcn variable usage)."
+        },
+        {
+          "path": "frontend/src/components/products/ProductCard.tsx",
+          "operation": "modify",
+          "description": "Ensure product cards emphasize large imagery and consistent spacing; align primary actions with the global primary color. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/layout/Header.tsx",
+          "operation": "modify",
+          "description": "Apply the theme consistently to header navigation (blue accents, readable contrast, mobile-first sizing). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/admin/AdminDashboardPage.tsx",
+          "operation": "modify",
+          "description": "Apply the same theme tokens to admin UI to maintain consistency with customer pages. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "summary": "Frontend security/privacy baseline: avoid hardcoded credentials, handle authorization errors safely, and ensure admin UI is not exposed to non-admins.",
+      "acceptanceCriteria": [
+        "All update/mutate backend methods verify caller authorization (user owns resource or is admin).",
+        "No username/password authentication is implemented; only Internet Identity principals are used.",
+        "Repository contains no hardcoded secret credentials in frontend code."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/utils/errors.ts",
+          "operation": "create",
+          "description": "Add shared error helpers to map authorization failures and backend traps into user-friendly English messages without leaking sensitive details."
+        },
+        {
+          "path": "frontend/src/components/auth/RequireAdmin.tsx",
+          "operation": "modify",
+          "description": "Harden admin guard: call isCallerAdmin/getCallerUserRole and show an English Access Denied UI for non-admins; do not rely on client-only checks for privileged actions. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useActor.ts",
+          "operation": "modify",
+          "description": "Review actor initialization flow to ensure it does not introduce hardcoded credentials; keep admin token handling limited to URL hash/session per existing helper and do not log secrets to console."
+        },
+        {
+          "path": "frontend/src/pages/admin/AdminDashboardPage.tsx",
+          "operation": "modify",
+          "description": "Ensure admin pages do not render sensitive management components until admin status is confirmed; show safe loading states and handle unauthorized errors in English."
+        },
+        {
+          "path": "frontend/src/components/auth/LoginButton.tsx",
+          "operation": "modify",
+          "description": "Ensure sign-in/sign-out UI and related copy never references username/password credentials; Internet Identity only. Verify the component's usage instructions before implementing."
+        }
+      ]
+    }
+  ]
+}

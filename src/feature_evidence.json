@@ -1,0 +1,344 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-implement-authentication-using-internet-identity-ii-and-require-login-for-purchasing-and-viewing-account-order-pages-provide-sign-in-sign-out-ui-and-persist-the-authenticated-session-in-the-frontend",
+      "featureTitle": "Implement authentication using Internet Identity (II) and require login for purchasing and viewing account/order pages. Provide sign-in/sign-out UI and persist the authenticated session in the frontend.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/auth/LoginButton.tsx",
+        "frontend/src/components/auth/RequireAuth.tsx",
+        "frontend/src/components/layout/Footer.tsx",
+        "frontend/src/components/layout/Header.tsx",
+        "frontend/src/hooks/useAuth.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-user-profiles-in-the-backend-keyed-by-principal-including-basic-fields-needed-for-ecommerce-display-name-phone-number-as-optional-text-shipping-address-as-optional-text-createdat-updatedat-provide-frontend-screens-to-view-update-the-profile",
+      "featureTitle": "Implement user profiles in the backend keyed by Principal, including basic fields needed for eCommerce (display name, phone number as optional text, shipping address as optional text, createdAt/updatedAt). Provide frontend screens to view/update the profile.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/profile/ProfileSetupModal.tsx",
+        "frontend/src/pages/AccountPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-create-the-product-catalog-data-model-and-apis-categories-brands-products-with-vendor-association-product-images-as-urls-price-specs-stock-availability-and-active-inactive-status",
+      "featureTitle": "Create the product catalog data model and APIs: categories, brands, products (with vendor association), product images (as URLs), price, specs, stock availability, and active/inactive status.",
+      "files": [
+        "frontend/src/data/catalogTaxonomy.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-the-product-browsing-ux-home-page-category-pages-brand-pages-product-grid-list-and-a-product-details-page-with-image-gallery-price-specifications-and-stock-status",
+      "featureTitle": "Build the product browsing UX: home page, category pages, brand pages, product grid/list, and a product details page with image gallery, price, specifications, and stock status.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/pages/BrandPage.tsx",
+        "frontend/src/pages/CategoryPage.tsx",
+        "frontend/src/pages/HomePage.tsx",
+        "frontend/src/pages/ProductDetailsPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-a-shopping-cart-system-tied-to-the-authenticated-user-add-remove-items-adjust-quantity-compute-subtotal-and-persist-cart-state-in-the-backend",
+      "featureTitle": "Implement a shopping cart system tied to the authenticated user: add/remove items, adjust quantity, compute subtotal, and persist cart state in the backend.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/pages/CartPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-checkout-flow-with-two-payment-methods-1-cash-on-delivery-cod-and-2-stripe-card-payment-collect-shipping-details-from-profile-or-entered-at-checkout-validate-stock-at-checkout-and-create-an-order",
+      "featureTitle": "Implement checkout flow with two payment methods: (1) Cash on Delivery (COD) and (2) Stripe card payment. Collect shipping details (from profile or entered at checkout), validate stock at checkout, and create an order.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/pages/CheckoutPage.tsx",
+        "frontend/src/pages/PaymentFailurePage.tsx",
+        "frontend/src/pages/PaymentSuccessPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-order-management-and-tracking-order-creation-from-cart-order-items-snapshot-name-price-at-purchase-order-status-lifecycle-e-g-pending-confirmed-shipped-delivered-cancelled-and-a-user-facing-order-history-order-detail-tracking-page",
+      "featureTitle": "Implement order management and tracking: order creation from cart, order items snapshot (name/price at purchase), order status lifecycle (e.g., Pending, Confirmed, Shipped, Delivered, Cancelled), and a user-facing order history + order detail tracking page.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/pages/OrderDetailsPage.tsx",
+        "frontend/src/pages/OrdersPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-create-an-admin-dashboard-secured-by-an-admin-allowlist-of-principals-stored-in-the-backend-no-hardcoded-username-password-admin-features-add-edit-delete-products-manage-stock-manage-orders-update-status-view-users-list-minimal-fields-and-view-basic-sales-reports-totals-by-day-and-by-product",
+      "featureTitle": "Create an admin dashboard secured by an admin allowlist of Principals stored in the backend (no hardcoded username/password). Admin features: add/edit/delete products, manage stock, manage orders (update status), view users list (minimal fields), and view basic sales reports (totals by day and by product).",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/auth/RequireAdmin.tsx",
+        "frontend/src/components/layout/Header.tsx",
+        "frontend/src/hooks/useAdmin.ts",
+        "frontend/src/pages/admin/AdminDashboardPage.tsx",
+        "frontend/src/pages/admin/AdminOrdersPage.tsx",
+        "frontend/src/pages/admin/AdminProductsPage.tsx",
+        "frontend/src/pages/admin/AdminReportsPage.tsx",
+        "frontend/src/pages/admin/AdminUsersPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-8"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-search-and-filtering-for-product-lists-text-search-by-name-filter-by-category-brand-and-price-range-with-results-reflected-in-the-url-query-parameters",
+      "featureTitle": "Implement search and filtering for product lists: text search by name, filter by category, brand, and price range, with results reflected in the URL query parameters.",
+      "files": [
+        "frontend/src/pages/BrandPage.tsx",
+        "frontend/src/pages/CategoryPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-9"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-customer-support-contact-form-page-that-lets-users-submit-a-support-ticket-subject-message-optional-order-id-store-tickets-in-the-backend-and-provide-an-admin-view-to-list-and-mark-tickets-as-resolved",
+      "featureTitle": "Add a customer support contact form page that lets users submit a support ticket (subject, message, optional order id). Store tickets in the backend and provide an admin view to list and mark tickets as resolved.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/layout/Footer.tsx",
+        "frontend/src/pages/SupportPage.tsx",
+        "frontend/src/pages/admin/AdminSupportTicketsPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-10"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-privacy-policy-and-terms-conditions-pages-with-professionally-structured-english-content-and-link-them-from-the-footer-and-from-the-sign-in-checkout-areas-for-store-compliance",
+      "featureTitle": "Add Privacy Policy and Terms & Conditions pages with professionally structured English content, and link them from the footer and from the sign-in/checkout areas for store compliance.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/auth/LoginButton.tsx",
+        "frontend/src/components/layout/Footer.tsx",
+        "frontend/src/pages/CheckoutPage.tsx",
+        "frontend/src/pages/PrivacyPolicyPage.tsx",
+        "frontend/src/pages/TermsPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-11"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-an-app-shell-and-brand-identity-in-the-ui-app-name-arzang-mobile-and-electronic-business-owner-name-and-contact-number-in-an-about-contact-page-and-consistent-header-footer-navigation-optimized-for-mobile-use",
+      "featureTitle": "Add an app shell and brand identity in the UI: app name “ArZang Mobile And Electronic”, business owner name and contact number in an About/Contact page, and consistent header/footer navigation optimized for mobile use.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/layout/AppShell.tsx",
+        "frontend/src/components/layout/Footer.tsx",
+        "frontend/src/components/layout/Header.tsx",
+        "frontend/src/pages/AboutContactPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-12"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-define-and-enforce-a-professional-blue-white-ecommerce-visual-theme-typography-spacing-components-and-apply-it-consistently-across-all-pages-home-listings-product-detail-cart-checkout-account-admin",
+      "featureTitle": "Define and enforce a professional blue & white eCommerce visual theme (typography, spacing, components) and apply it consistently across all pages (home, listings, product detail, cart, checkout, account, admin).",
+      "files": [
+        "frontend/src/components/layout/Header.tsx",
+        "frontend/src/index.css",
+        "frontend/src/pages/admin/AdminDashboardPage.tsx",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-13"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-security-and-privacy-baseline-ensure-backend-authorization-checks-for-all-user-admin-resources-do-not-store-any-plaintext-passwords-and-avoid-embedding-the-provided-example-admin-credentials-anywhere-in-frontend-or-backend-code",
+      "featureTitle": "Security and privacy baseline: ensure backend authorization checks for all user/admin resources, do not store any plaintext passwords, and avoid embedding the provided example admin credentials anywhere in frontend or backend code.",
+      "files": [
+        "frontend/src/components/auth/LoginButton.tsx",
+        "frontend/src/components/auth/RequireAdmin.tsx",
+        "frontend/src/hooks/useActor.ts",
+        "frontend/src/pages/admin/AdminDashboardPage.tsx",
+        "frontend/src/utils/errors.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-14"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

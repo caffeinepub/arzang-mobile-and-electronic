@@ -1,0 +1,172 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-10T04:11:17.477Z",
+  "summary": "Diff adds initial React/TanStack Router app shell with auth gating components, Internet Identity-based auth hooks, basic profile UI, and partial backend scaffolding for access control, user profiles, placeholder product queries, and Stripe configuration. Core eCommerce functionality (catalog CRUD/details, cart, checkout/orders, search/filtering, support tickets, admin management/reporting) is largely missing or stubbed in the backend per the provided diff evidence.",
+  "missing_requirements": [
+    {
+      "id": "REQ-1",
+      "requirement": "Backend method returns the current user profile creating it if missing.",
+      "reason": "backend/main.mo getCallerUserProfile returns an optional profile from a map and does not create a profile when missing.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "requirement": "Full product catalog data model and APIs for categories, brands, products (with vendor association), images (URLs), specs, stock, active/inactive status; list endpoints with pagination; fetch single product by id with full details.",
+      "reason": "backend/main.mo only defines a minimal Product type (id, name, description, price, createdAt) and provides placeholder queries that always return empty arrays; createProduct/deleteFakeProduct trap as not implemented; no category/brand/vendor/images/specs/stock/active fields, no pagination, no get-by-id endpoint.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "requirement": "Product details page shows image gallery, specifications, and stock status; navigation home→category/brand→product details.",
+      "reason": "Routes/pages are wired in frontend/src/App.tsx, but the diff does not provide evidence that ProductDetailsPage implements gallery/specs/stock status UI.",
+      "evidence": [
+        "frontend/src/App.tsx"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "requirement": "Shopping cart system persisted in backend tied to authenticated user (add/remove/adjust quantity, subtotal, persistence across refresh/devices).",
+      "reason": "No cart data model or backend methods are shown; backend/main.mo contains no cart storage or APIs.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/App.tsx"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "requirement": "Checkout flow supporting COD and Stripe, collecting shipping details, validating stock at checkout, and creating orders; Stripe success marks order Paid and failure/cancel does not.",
+      "reason": "backend/main.mo shows only Stripe configuration/session status scaffolding (truncated) and no checkout/order creation APIs, no COD handling, and no stock validation logic.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/App.tsx"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "requirement": "Order management and tracking: create from cart with item snapshots, status lifecycle, order history + detail pages, and backend authorization so users only read their own orders.",
+      "reason": "No order storage/model or APIs are shown in backend/main.mo; frontend routes exist but do not evidence actual order functionality.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/App.tsx"
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "requirement": "Admin dashboard secured by admin allowlist stored in backend; admin product CRUD/stock management; order status updates; users list; sales reports (totals by day/product) for a date range.",
+      "reason": "Frontend admin pages/routes are present, but backend product admin methods trap as not implemented and there is no evidence of order management, users list, or sales reporting endpoints/data; allowlist storage is not evidenced in the shown backend code (only generic AccessControl state).",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/App.tsx",
+        "frontend/src/pages/admin/AdminDashboardPage.tsx",
+        "frontend/src/hooks/useAdmin.ts",
+        "frontend/src/components/auth/RequireAdmin.tsx"
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "requirement": "Search and filtering for product lists (text, category, brand, price range) reflected in URL query params; backend supports server-side filtering/pagination.",
+      "reason": "backend/main.mo only includes placeholder getProductsByName/getProductsByPriceRange returning empty arrays and no pagination or category/brand filters; no evidence of URL query-param-driven filters in listing pages in provided diff excerpts.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/hooks/useQueries.ts"
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "requirement": "Support contact form storing tickets in backend and admin view to list/resolve tickets.",
+      "reason": "Frontend routes include SupportPage and AdminSupportTicketsPage, but backend/main.mo shows no ticket data model or APIs to create/list/update ticket status.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/App.tsx"
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "requirement": "Privacy Policy and Terms & Conditions pages with professionally structured English content, linked from footer and from sign-in/checkout areas.",
+      "reason": "Footer links to /privacy and /terms are present, but there is no evidence in the diff excerpts of the actual page content or that sign-in/checkout areas link to them.",
+      "evidence": [
+        "frontend/src/components/layout/Footer.tsx",
+        "frontend/src/App.tsx",
+        "frontend/src/components/auth/RequireAuth.tsx"
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "requirement": "Avoid embedding example admin credentials and ensure authorization uses principals/admin allowlist (no alternative secret credential mechanism).",
+      "reason": "Diff shows a frontend mechanism passing a URL parameter 'caffeineAdminToken' into a backend initialization call, which suggests an additional secret-based access path beyond principal allowlisting; this is not supported by the requirement and may weaken the stated baseline.",
+      "evidence": [
+        "frontend/src/hooks/useActor.ts"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Admin access control initialization using a secret token read from a URL parameter ('caffeineAdminToken') and calling actor._initializeAccessControlWithSecret(adminToken).",
+      "reason": "BuildRequest specifies admin security via an allowlist of Principals stored in the backend and explicitly avoids username/password-like credential schemes; a secret token passed via URL is not requested.",
+      "evidence": [
+        "frontend/src/hooks/useActor.ts"
+      ]
+    },
+    {
+      "description": "Footer attribution link to 'caffeine.ai' with UTM parameters.",
+      "reason": "BuildRequest does not request any third-party builder attribution in the UI.",
+      "evidence": [
+        "frontend/src/components/layout/Footer.tsx"
+      ]
+    }
+  ],
+  "confidence": 0.74,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/components/auth/LoginButton.tsx",
+    "frontend/src/components/auth/RequireAdmin.tsx",
+    "frontend/src/components/auth/RequireAuth.tsx",
+    "frontend/src/components/layout/AppShell.tsx",
+    "frontend/src/components/layout/Footer.tsx",
+    "frontend/src/components/layout/Header.tsx",
+    "frontend/src/components/profile/ProfileSetupModal.tsx",
+    "frontend/src/data/catalogTaxonomy.ts",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useAdmin.ts",
+    "frontend/src/hooks/useAuth.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/index.css",
+    "frontend/src/main.tsx",
+    "frontend/src/pages/AboutContactPage.tsx",
+    "frontend/src/pages/AccountPage.tsx",
+    "frontend/src/pages/BrandPage.tsx",
+    "frontend/src/pages/CartPage.tsx",
+    "frontend/src/pages/CategoryPage.tsx",
+    "frontend/src/pages/CheckoutPage.tsx",
+    "frontend/src/pages/HomePage.tsx",
+    "frontend/src/pages/OrderDetailsPage.tsx",
+    "frontend/src/pages/OrdersPage.tsx",
+    "frontend/src/pages/PaymentFailurePage.tsx",
+    "frontend/src/pages/PaymentSuccessPage.tsx",
+    "frontend/src/pages/PrivacyPolicyPage.tsx",
+    "frontend/src/pages/ProductDetailsPage.tsx",
+    "frontend/src/pages/SupportPage.tsx",
+    "frontend/src/pages/TermsPage.tsx",
+    "frontend/src/pages/admin/AdminDashboardPage.tsx",
+    "frontend/src/pages/admin/AdminOrdersPage.tsx",
+    "frontend/src/pages/admin/AdminProductsPage.tsx",
+    "frontend/src/pages/admin/AdminReportsPage.tsx",
+    "frontend/src/pages/admin/AdminSupportTicketsPage.tsx",
+    "frontend/src/pages/admin/AdminUsersPage.tsx",
+    "frontend/src/utils/errors.ts",
+    "frontend/src/utils/urlParams.ts",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}

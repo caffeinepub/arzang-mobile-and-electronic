@@ -1,2 +1,3 @@
-# arzang-mobile-and-electronic
-Exported from Caffeine project: ArZang Mobile And Electronic
+## ArZang Mobile And Electronic
+
+To run app build and run docker image: `docker build -t app . docker run -it --network host app`

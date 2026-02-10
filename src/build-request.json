@@ -1,0 +1,306 @@
+{
+  "kind": "build_request",
+  "title": "ArZang Mobile And Electronic — multi-vendor eCommerce web app (mobile-first) with catalog, cart, checkout (COD + Stripe), orders, admin dashboard, and legal pages",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Implement authentication using Internet Identity (II) and require login for purchasing and viewing account/order pages. Provide sign-in/sign-out UI and persist the authenticated session in the frontend.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Main Features:\n1. User Registration and Login (Email, Phone, Google Login)",
+          "Security Requirements:\n- Use encrypted authentication (JWT or OAuth)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "User can sign in and sign out using Internet Identity.",
+        "Frontend shows authenticated vs unauthenticated states (e.g., account menu, checkout gating).",
+        "Backend exposes a method to read the caller identity and returns the current user profile (creating it if missing)."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Implement user profiles in the backend keyed by Principal, including basic fields needed for eCommerce (display name, phone number as optional text, shipping address as optional text, createdAt/updatedAt). Provide frontend screens to view/update the profile.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Follow GDPR and data privacy rules"
+        ]
+      },
+      "acceptanceCriteria": [
+        "User can update profile fields from the frontend and see them reflected after refresh.",
+        "Backend stores profiles per Principal and does not store any plaintext passwords.",
+        "All user-facing profile labels and validation messages are in English."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Create the product catalog data model and APIs: categories, brands, products (with vendor association), product images (as URLs), price, specs, stock availability, and active/inactive status.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Product Categories:\n   - Mobile Phones (Samsung, Apple, Xiaomi, Oppo, Vivo, Realme, etc.)\n   - Electronics (Headphones, Chargers, Power Banks, Speakers, Accessories)",
+          "Product Details Page:\n   - Product Images\n   - Price\n   - Specifications\n   - Stock Availability"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend exposes query endpoints to list categories/brands and list products with pagination.",
+        "Backend exposes an endpoint to fetch a single product by id with full details (images, specs, stock).",
+        "Frontend renders category and brand navigation for Mobile Phones and Electronics and shows product lists with big product images, name, and price."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Build the product browsing UX: home page, category pages, brand pages, product grid/list, and a product details page with image gallery, price, specifications, and stock status.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Modern, clean, fast, and user-friendly UI similar to Alibaba or Daraz.",
+          "Design Style:\n- Professional eCommerce UI\n- Blue & White modern color theme\n- Big product images\n- Easy navigation like Alibaba"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Users can navigate from home → category/brand → product details.",
+        "Product details page clearly shows price, stock state (In stock/Out of stock), and a specifications section.",
+        "UI is mobile-first responsive and consistently uses a blue/white theme."
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Implement a shopping cart system tied to the authenticated user: add/remove items, adjust quantity, compute subtotal, and persist cart state in the backend.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "4. Shopping Cart System"
+        ]
+      },
+      "acceptanceCriteria": [
+        "User can add a product to cart from product list/details.",
+        "Cart persists across refresh and across devices for the same authenticated user.",
+        "Cart totals update correctly when quantity changes and when items are removed."
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Implement checkout flow with two payment methods: (1) Cash on Delivery (COD) and (2) Stripe card payment. Collect shipping details (from profile or entered at checkout), validate stock at checkout, and create an order.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "5. Secure Checkout System\n   - Cash on Delivery\n   - Online Payment Integration (Stripe, PayPal, local payment gateways)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Checkout offers COD and Stripe as payment options (PayPal/local gateways are not implemented).",
+        "Order creation fails with a clear English error if any item is out of stock or quantity exceeds stock.",
+        "COD orders are created immediately and appear in the user’s order list.",
+        "Stripe flow results in an order marked as Paid when payment succeeds (and not marked paid when it fails/cancels)."
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Implement order management and tracking: order creation from cart, order items snapshot (name/price at purchase), order status lifecycle (e.g., Pending, Confirmed, Shipped, Delivered, Cancelled), and a user-facing order history + order detail tracking page.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "6. Order Tracking System"
+        ]
+      },
+      "acceptanceCriteria": [
+        "User can view a list of their orders and open an order details page.",
+        "Order details shows status, items, totals, and shipping details in English.",
+        "Backend enforces that users can only read their own orders."
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Create an admin dashboard secured by an admin allowlist of Principals stored in the backend (no hardcoded username/password). Admin features: add/edit/delete products, manage stock, manage orders (update status), view users list (minimal fields), and view basic sales reports (totals by day and by product).",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "7. Admin Panel Dashboard:\n   - Add / Edit / Delete Products\n   - Manage Orders\n   - Manage Users\n   - Stock Management\n   - Sales Reports",
+          "Admin Credentials (Example Only – Must be stored securely in backend):\nAdmin Username: imadalidurrani\nAdmin Password: Ia@532001",
+          "Security Requirements:\n- Do not store passwords in plain text"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Only Principals in the backend admin allowlist can access admin APIs and admin UI routes.",
+        "Admin can create and edit products including images, specs, price, category/brand, and stock quantity.",
+        "Admin can change order status and the user sees the updated status in their tracking page.",
+        "Sales report page shows at least: total orders, total revenue (from paid orders), and top products for a selectable date range."
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "text": "Implement search and filtering for product lists: text search by name, filter by category, brand, and price range, with results reflected in the URL query parameters.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "8. Search and Filter System (Price, Brand, Category)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "User can search by keyword and filter by category/brand/price range on product listing pages.",
+        "Filters and search can be shared via URL and restore state on refresh.",
+        "Backend supports server-side filtering/pagination for performance."
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "text": "Add a customer support contact form page that lets users submit a support ticket (subject, message, optional order id). Store tickets in the backend and provide an admin view to list and mark tickets as resolved.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "9. Customer Support Chat or Contact Form"
+        ]
+      },
+      "acceptanceCriteria": [
+        "User can submit a support ticket and gets a confirmation message in English.",
+        "Admin can view submitted tickets and update their status (Open/Resolved).",
+        "No real-time chat is implemented; only the contact form/ticket workflow exists."
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "text": "Add Privacy Policy and Terms & Conditions pages with professionally structured English content, and link them from the footer and from the sign-in/checkout areas for store compliance.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "11. Privacy Policy and Terms & Conditions page (mandatory for Play Store & Apple)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Privacy Policy page is accessible without login.",
+        "Terms & Conditions page is accessible without login.",
+        "Both pages are reachable from a persistent footer and from checkout UI."
+      ]
+    },
+    {
+      "id": "REQ-12",
+      "text": "Add an app shell and brand identity in the UI: app name “ArZang Mobile And Electronic”, business owner name and contact number in an About/Contact page, and consistent header/footer navigation optimized for mobile use.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "App Name:\nArZang Mobile And Electronic\n\nBusiness Owner:\nImad Ali Durrani\n\nContact Number:\n0325-1565255"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Header shows app name and provides navigation to Home, Categories, Cart, Orders, Account, and Admin (only for admins).",
+        "About/Contact page displays business owner name and contact number in English labels.",
+        "Navigation is usable on small screens (mobile-first layout)."
+      ]
+    },
+    {
+      "id": "REQ-13",
+      "text": "Define and enforce a professional blue & white eCommerce visual theme (typography, spacing, components) and apply it consistently across all pages (home, listings, product detail, cart, checkout, account, admin).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Design Style:\n- Professional eCommerce UI\n- Blue & White modern color theme\n- Big product images"
+        ]
+      },
+      "acceptanceCriteria": [
+        "All primary actions use the same primary color and button style.",
+        "Product cards use consistent spacing and emphasize large product images.",
+        "Theme is applied across both customer-facing and admin pages."
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "text": "Security and privacy baseline: ensure backend authorization checks for all user/admin resources, do not store any plaintext passwords, and avoid embedding the provided example admin credentials anywhere in frontend or backend code.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Security Requirements:\n- Do not store passwords in plain text",
+          "Admin Credentials (Example Only – Must be stored securely in backend):\nAdmin Username: imadalidurrani\nAdmin Password: Ia@532001"
+        ]
+      },
+      "acceptanceCriteria": [
+        "All update/mutate backend methods verify caller authorization (user owns resource or is admin).",
+        "No username/password authentication is implemented; only Internet Identity principals are used.",
+        "Repository contains no hardcoded secret credentials in frontend code."
+      ]
+    }
+  ],
+  "constraints": [
+    "Backend must be a single Motoko actor (no additional backend services).",
+    "Frontend must be React + TypeScript with Tailwind, Shadcn UI components (composed, not edited in immutable paths), and React Query for server state.",
+    "User-facing text must be in English.",
+    "Do not implement unsupported auth methods (Google login, phone/SMS OTP) since only Internet Identity is supported in this stack.",
+    "Do not implement push notifications or real-time chat (not supported in this environment)."
+  ],
+  "nonGoals": [
+    "Native Android/iOS app builds (Flutter/React Native/Swift/Kotlin) — deliver as a mobile-first responsive web app.",
+    "PayPal and local payment gateway integrations (only Stripe supported).",
+    "WebSocket-based real-time customer support chat.",
+    "True app-store submission assets/workflows (this build focuses on product functionality and required pages)."
+  ],
+  "imageRequirements": {
+    "required": [
+      "App logo: minimalist shopping bag + phone silhouette, blue/white palette (app-logo.dim_1024x1024.png)",
+      "Home hero banner: modern electronics collage with clean white background and blue accents (home-hero.dim_1600x600.png)",
+      "Category illustration: Mobile Phones icon/illustration, flat modern style (category-mobiles.dim_512x512.png)",
+      "Category illustration: Electronics/Accessories icon/illustration, flat modern style (category-electronics.dim_512x512.png)",
+      "Placeholder product image: clean photo-style placeholder with subtle blue frame (product-placeholder.dim_800x800.png)"
+    ],
+    "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [
+      "Build a mobile-first multi-vendor eCommerce web application for mobile phones and electronics with catalog, cart, checkout, order tracking, and admin management, compliant with app-store policy requirements (privacy/terms)."
+    ],
+    "goalsToRemove": [],
+    "preferencesToAdd": [
+      "Use a professional blue & white eCommerce visual theme with large product images and Alibaba/Daraz-like navigation patterns."
+    ],
+    "preferencesToRemove": [],
+    "miscToAdd": [
+      "Business owner: Imad Ali Durrani; Contact number: 0325-1565255; App name: ArZang Mobile And Electronic."
+    ],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
+  }
+}
